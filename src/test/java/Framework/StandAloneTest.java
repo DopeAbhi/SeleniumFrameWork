@@ -4,10 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import javax.swing.*;
 import java.time.Duration;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class StandAloneTest {
         System.out.println(driver.findElement(By.cssSelector("#toast-container")).getText());
 
         //Adding Second Product in the Cart
-        prod=products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
+        prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
                 .equals("ZARA COAT 3")).findFirst().orElse(null);
 
         prod.findElement(By.cssSelector(".card-body button:last-child")).click();
@@ -69,12 +71,42 @@ public class StandAloneTest {
         driver.findElement(By.xpath("//button[@routerlink='/dashboard/cart']")).click();
 
 
-
 //Verifying Added Items from the Cart
-        List<WebElement> cartlist=driver.findElements(By.xpath("//div[@class='cartSection']/h3"));
-       Boolean match= cartlist.stream().anyMatch(product->product.getText().equals(productName));
-       Assert.assertTrue(match);
+        List<WebElement> cartlist = driver.findElements(By.xpath("//div[@class='cartSection']/h3"));
+        Boolean match = cartlist.stream().anyMatch(product -> product.getText().equals(productName));
+        Assert.assertTrue(match);
 
+//Checkout Button Click
+        driver.findElement(By.cssSelector("[class='totalRow'] button")).click();
+        //Handling Auto Suggestive Dropdown
+
+        driver.findElement(By.xpath("//input[@placeholder='Select Country']")).sendKeys("India");
+        List<WebElement> dropdownlist = driver.findElements(By.xpath("//button/span"));
+
+        dropdownlist.stream().filter(text -> text.getText().equalsIgnoreCase("India")).findFirst().ifPresent(WebElement::click); //Stream Logic of Below Code
+
+        //With the Help of Actions Classes Handling Auto Suggestive Dropdown
+        Actions a = new Actions(driver);
+        a.sendKeys( driver.findElement(By.xpath("//input[@placeholder='Select Country']")),"India").build().perform();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));
+        driver.findElement(By.xpath("(//button[contains(@class,'ta-item')]) [2]")).click();
+
+
+//       for (WebElement element : dropdownlist)
+//       {
+//           if (element.getText().equalsIgnoreCase("India"))
+//           {
+//               element.click();
+//           }
+//       }
+
+        driver.findElement(By.cssSelector(".action__submit")).click();
+
+        List<WebElement> orderID = driver.findElements(By.cssSelector("label[class='ng-star-inserted']"));
+        for (WebElement order : orderID) {
+            System.out.println(order.getText());
+        }
 
 
         driver.quit();
