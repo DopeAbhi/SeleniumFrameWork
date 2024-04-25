@@ -1,6 +1,8 @@
 package Test;
 
+import PageObject.CartPage;
 import PageObject.LandingPage;
+import PageObject.PaymentPage;
 import PageObject.ProdutCatalouge;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,89 +21,45 @@ public class SubmitOrderTest {
     public static void main(String[] args) throws InterruptedException {
 
         String productName = "ADIDAS ORIGINAL";
+        String productName2 = "ZARA COAT 3";
         //  WebDriverManager.chromedriver().setup();  //We don't need this from selenium 4  //This downloads the driver for chrome while running
         WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         //Login into the Application
         LandingPage page = new LandingPage(driver);
         page.goTo();
-       page.loginApplication("AbhayVerma@yopmail.com","Test@123");
+        ProdutCatalouge produtCatalouge = page.loginApplication("AbhayVerma@yopmail.com", "Test@123");
 
         //Adding Item in Cart
-        ProdutCatalouge produtCatalouge=new ProdutCatalouge(driver);
-        List<WebElement> products=produtCatalouge.getProducts();
 
-        WebElement prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
-                .equals(productName)).findFirst().orElse(null); //Stream Implementation
-
-        prod.findElement(By.cssSelector(".card-body button:last-child")).click();
+        List<WebElement> products = produtCatalouge.getProducts();
+        CartPage cartPage = produtCatalouge.addProductToCart(productName);
+        //   produtCatalouge.addProductToCart(productName2);
 
 
-        //        for(WebElement element: products) My Implementation
-//        {
-//            if(element.getText().equals("ADIDAS ORIGINAL"))
-//                System.out.println(element.getText());
-//
-//        }
+        //Cart Page Handling
 
-//Explicit Wait for Toast Message
+        cartPage.cartNavigation(); //Method is Declared inside the AbstractComponent
+        Boolean match = cartPage.verifyCartItem(productName);
+        Assert.assertTrue(match);
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
+        PaymentPage paymentPage = cartPage.cartCheckout();
 
-//Class for the Loader=  ng-animating
-        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector(".ng-animating")))); //Checking loader is getting disppeared or not
-        System.out.println(driver.findElement(By.cssSelector("#toast-container")).getText());
-
-        //Adding Second Product in the Cart
-        prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
-                .equals("ZARA COAT 3")).findFirst().orElse(null);
-
-        prod.findElement(By.cssSelector(".card-body button:last-child")).click();
-
-        //Explicit Wait for Toast Message
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
-
-        //Class for the Loader=  ng-animating
-        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.cssSelector(".ng-animating")))); //Checking loader is getting disppeared or not
-        System.out.println(driver.findElement(By.cssSelector("#toast-container")).getText());
 
         //Navigating to the Cart
-        driver.findElement(By.xpath("//button[@routerlink='/dashboard/cart']")).click();
 
 
 //Verifying Added Items from the Cart
-        List<WebElement> cartlist = driver.findElements(By.xpath("//div[@class='cartSection']/h3"));
-        Boolean match = cartlist.stream().anyMatch(product -> product.getText().equals(productName));
-        Assert.assertTrue(match);
-
-//Checkout Button Click
-        driver.findElement(By.cssSelector("[class='totalRow'] button")).click();
-        //Handling Auto Suggestive Dropdown
-
-        driver.findElement(By.xpath("//input[@placeholder='Select Country']")).sendKeys("India");
-        List<WebElement> dropdownlist = driver.findElements(By.xpath("//button/span"));
-
-        dropdownlist.stream().filter(text -> text.getText().equalsIgnoreCase("India")).findFirst().ifPresent(WebElement::click); //Stream Logic of Below Code
-
-        //With the Help of Actions Classes Handling Auto Suggestive Dropdown
-        Actions a = new Actions(driver);
-        a.sendKeys( driver.findElement(By.xpath("//input[@placeholder='Select Country']")),"India").build().perform();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));
-        driver.findElement(By.xpath("(//button[contains(@class,'ta-item')]) [2]")).click();
+//        List<WebElement> cartlist = driver.findElements(By.xpath("//div[@class='cartSection']/h3"));
+//        Boolean match = cartlist.stream().anyMatch(product -> product.getText().equals(productName));
 
 
-//       for (WebElement element : dropdownlist)
-//       {
-//           if (element.getText().equalsIgnoreCase("India"))
-//           {
-//               element.click();
-//           }
-//       }
+//Payment Page Handling
 
-        driver.findElement(By.cssSelector(".action__submit")).click();
+        paymentPage.autoSuggestiveDropDown();
+        paymentPage.orderPlace();
 
         List<WebElement> orderID = driver.findElements(By.cssSelector("label[class='ng-star-inserted']"));
         for (WebElement order : orderID) {

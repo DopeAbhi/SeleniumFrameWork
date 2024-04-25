@@ -32,12 +32,31 @@ public class ProdutCatalouge  extends AbstractComponent {
     @FindBy(css=".mb-3")
     List<WebElement> products;
     By productsBy=By.cssSelector(".mb-3");
+    By toastMessage=By.cssSelector("#toast-container");
+    By loader=By.cssSelector(".ng-animating");
 
     public List<WebElement> getProducts()
     {
      WaitForLocator(productsBy);
      return products;
     }
+    public WebElement getProductByName(String productName)
+    {
+        WebElement prod = getProducts().stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
+                .equals(productName)).findFirst().orElse(null); //Stream Implementation
+        return prod;
+    }
+
+    public CartPage addProductToCart(String productName)
+    {
+        WebElement prod=getProductByName(productName).findElement(By.cssSelector(".card-body button:last-child"));
+        prod.click();
+        WaitForLocator(toastMessage);
+        WaitforLocatorDisappear(loader);
+        CartPage cartPage=new CartPage(driver);
+        return cartPage;
+    }
+
 
     public void goTo()
     {
