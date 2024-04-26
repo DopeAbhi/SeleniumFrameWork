@@ -15,8 +15,8 @@ public class AbstractComponent {
 
     public AbstractComponent(WebDriver driver) {
 
-    this.driver = driver;
-    PageFactory.initElements(driver,this);
+        this.driver = driver;
+        PageFactory.initElements(driver,this);
 
     }
 
@@ -34,15 +34,15 @@ public class AbstractComponent {
     }
 
 
-public void WaitForLocator(By FindBy)
-{
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    wait.until(ExpectedConditions.visibilityOfElementLocated(FindBy));
-}
+    public void WaitForLocator(By FindBy)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(FindBy));
+    }
 
-public void WaitforLocatorDisappear(By FindBy)
-{
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-    wait.until(ExpectedConditions.invisibilityOf(driver.findElement(FindBy)));
-}
+    public void WaitforLocatorDisappear(By FindBy)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.invisibilityOf(driver.findElement(FindBy)));
+    }
 }

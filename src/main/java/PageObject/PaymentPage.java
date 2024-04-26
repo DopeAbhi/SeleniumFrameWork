@@ -8,9 +8,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import static org.openqa.selenium.By.cssSelector;
-import static org.openqa.selenium.bidi.browsingcontext.Locator.css;
-
 public class PaymentPage extends AbstractComponent {
     WebDriver driver;
     public PaymentPage(WebDriver driver) {
@@ -32,22 +29,23 @@ public class PaymentPage extends AbstractComponent {
     @FindBy(css = ".action__submit")
     WebElement completePayment;
 
+    By result=By.cssSelector(".ta-results");
 
 
 
-
-    public void autoSuggestiveDropDown()
+    public void selectCountry(String countryName)
     {
 
         Actions a = new Actions(driver);
-        a.sendKeys( autoSuggestiveDropdown,"India").build().perform();
-        WaitForLocator(By.cssSelector(".ta-results"));
+        a.sendKeys( autoSuggestiveDropdown,countryName).build().perform();
+        WaitForLocator(result);
         optionSelection.click();
     }
 
-    public void orderPlace()
+    public ConfirmationPage orderPlace()
     {
         completePayment.click();
+        return new ConfirmationPage(driver);
     }
 
 

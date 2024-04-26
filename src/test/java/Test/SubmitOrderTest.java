@@ -1,9 +1,6 @@
 package Test;
 
-import PageObject.CartPage;
-import PageObject.LandingPage;
-import PageObject.PaymentPage;
-import PageObject.ProdutCatalouge;
+import PageObject.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,26 +42,16 @@ public class SubmitOrderTest {
         Boolean match = cartPage.verifyCartItem(productName);
         Assert.assertTrue(match);
 
+
+        //Payment Page Handling
         PaymentPage paymentPage = cartPage.cartCheckout();
+        paymentPage.selectCountry("India");
 
+        //Confirmation Page
+        ConfirmationPage confirmationPage= paymentPage.orderPlace();
 
-        //Navigating to the Cart
-
-
-//Verifying Added Items from the Cart
-//        List<WebElement> cartlist = driver.findElements(By.xpath("//div[@class='cartSection']/h3"));
-//        Boolean match = cartlist.stream().anyMatch(product -> product.getText().equals(productName));
-
-
-//Payment Page Handling
-
-        paymentPage.autoSuggestiveDropDown();
-        paymentPage.orderPlace();
-
-        List<WebElement> orderID = driver.findElements(By.cssSelector("label[class='ng-star-inserted']"));
-        for (WebElement order : orderID) {
-            System.out.println(order.getText());
-        }
+        String confirmMessage=confirmationPage.getConfirmationMessage();
+        Assert.assertTrue(confirmMessage.equalsIgnoreCase("Thankyou for the order."));
 
 
         driver.quit();

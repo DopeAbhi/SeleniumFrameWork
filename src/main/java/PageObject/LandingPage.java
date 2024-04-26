@@ -36,8 +36,8 @@ public class LandingPage extends AbstractComponent {
         userEmail.sendKeys(email);
         userPassword.sendKeys(password);
         submit.click();
-        ProdutCatalouge produtCatalouge=new ProdutCatalouge(driver);
-        return produtCatalouge;
+        return  new ProdutCatalouge(driver);
+
     }
 
     public void goTo()

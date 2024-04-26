@@ -25,17 +25,17 @@ public class CartPage extends AbstractComponent {
     WebElement CheckoutButton;
 
 
-   public Boolean verifyCartItem(String productName)
-   {
-     Boolean match=  cartItem.stream().anyMatch(product -> product.getText().equals(productName));
-     return match;
-   }
+    public Boolean verifyCartItem(String productName)
+    {
+        Boolean match=  cartItem.stream().anyMatch(product -> product.getText().equals(productName));
+        return match;
+    }
 
     public PaymentPage cartCheckout()
     {
         CheckoutButton.click();
-        PaymentPage paymentPage=new PaymentPage(driver);
-        return paymentPage;
+        return new PaymentPage(driver);
+
     }
 
 
