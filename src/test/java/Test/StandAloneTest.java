@@ -32,8 +32,7 @@ public class StandAloneTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".mb-3")));
         List<WebElement> products = driver.findElements(By.cssSelector(".mb-3"));
-        WebElement prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
-                .equals(productName)).findFirst().orElse(null); //Stream Implementation
+        WebElement prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null); //Stream Implementation
 
         prod.findElement(By.cssSelector(".card-body button:last-child")).click();
 
@@ -54,8 +53,7 @@ public class StandAloneTest {
         System.out.println(driver.findElement(By.cssSelector("#toast-container")).getText());
 
         //Adding Second Product in the Cart
-        prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText()
-                .equals("ZARA COAT 3")).findFirst().orElse(null);
+        prod = products.stream().filter(product -> product.findElement(By.cssSelector("b")).getText().equals("ZARA COAT 3")).findFirst().orElse(null);
 
         prod.findElement(By.cssSelector(".card-body button:last-child")).click();
 
@@ -87,7 +85,7 @@ public class StandAloneTest {
 
         //With the Help of Actions Classes Handling Auto Suggestive Dropdown
         Actions a = new Actions(driver);
-        a.sendKeys( driver.findElement(By.xpath("//input[@placeholder='Select Country']")),"India").build().perform();
+        a.sendKeys(driver.findElement(By.xpath("//input[@placeholder='Select Country']")), "India").build().perform();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ta-results")));
         driver.findElement(By.xpath("(//button[contains(@class,'ta-item')]) [2]")).click();
