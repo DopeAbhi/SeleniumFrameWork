@@ -1,5 +1,6 @@
 package TestComponents;
 
+import PageObject.LandingPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -12,9 +13,9 @@ import java.time.Duration;
 import java.util.Properties;
 
 public class BaseTest {
-
+   public WebDriver driver;
     public WebDriver intializeDriver() throws IOException {
-        WebDriver driver = null;
+
         Properties properties = new Properties();
         FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"/src/main/java/Resources/GlobalData.properties");
         properties.load(fis);
@@ -51,4 +52,13 @@ public class BaseTest {
 
 
     }
+    public  LandingPage launchApplication() throws IOException {
+        driver=intializeDriver();
+        LandingPage page = new LandingPage(driver);
+        page.goTo();
+        return page;
+
+    }
+
+
 }
