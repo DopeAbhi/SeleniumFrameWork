@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite parallel="tests" name="All Test Suite"> <!-- To Run Tests Parllely -->
+    <test  verbose="2" preserve-order="true" name="Error Validations" thread-count="5">
+        <classes>
+            <class name="Test.ErrorValidations">
+                <methods>
+                    <include name="submitOrder"/>
+                     <include name="addtoCartcheck"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Order" thread-count="2">
+        <classes>
+            <class name="Test.SubmitOrderTest">
+                <methods>
+                    <include name="submitOrder"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

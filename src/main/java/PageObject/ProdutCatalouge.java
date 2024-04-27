@@ -47,21 +47,16 @@ public class ProdutCatalouge  extends AbstractComponent {
         return prod;
     }
 
-    public CartPage addProductToCart(String productName)
+    public void addProductToCart(String productName)
     {
         WebElement prod=getProductByName(productName).findElement(By.cssSelector(".card-body button:last-child"));
         prod.click();
         WaitForLocator(toastMessage);
         WaitforLocatorDisappear(loader);
-        CartPage cartPage=new CartPage(driver);
-        return cartPage;
+
     }
 
 
-    public void goTo()
-    {
-        driver.get("https://rahulshettyacademy.com/client");
-    }
 
 
 }
