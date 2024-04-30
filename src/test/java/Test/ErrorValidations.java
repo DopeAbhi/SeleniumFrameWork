@@ -19,7 +19,7 @@ public class ErrorValidations extends BaseTest {
     //Browser Invoke and Login into the Application is in the Base test
 
     page.loginApplication("AbhayVerma@yopmail.com", "Test"); //here is page object is getting access from parent class
-    Assert.assertEquals(page.getErrorMessage(),"Incorrect email or password.");
+    Assert.assertEquals(page.getErrorMessage(),"Incorrect eemail or password.");
 
     //#toast-container
    // div[aria-label='Incorrect email or password.']

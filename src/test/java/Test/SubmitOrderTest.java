@@ -53,12 +53,7 @@ public class SubmitOrderTest extends BaseTest {
         //Browser Close is also defined inside the BaseTest Class
     }
 
-    public void getScreenshot(String testCaseName) throws IOException {
 
-       File screenShot=( (TakesScreenshot)(driver)).getScreenshotAs(OutputType.FILE);
-       File file=new File(System.getProperty("user.dir")+"/reports/"+testCaseName+".png");
-       FileUtils.copyFile(screenShot,file);
-    }
     @Test(dependsOnMethods = {"submitOrder"}, dataProvider = "getData")
     public void OrderHistoryTest(HashMap<String, String> input)
     {
