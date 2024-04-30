@@ -71,10 +71,12 @@ public class BaseTest {
 
     public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
 
-        File screenShot=( (TakesScreenshot)(driver)).getScreenshotAs(OutputType.FILE);
-        File file=new File(System.getProperty("user.dir")+"/reports/"+testCaseName+".png");
-        FileUtils.copyFile(screenShot,file);
-        return System.getProperty("user.dir")+"/reports/"+testCaseName+".png";
+       TakesScreenshot ts= (TakesScreenshot)driver;
+        File screenShot= ts.getScreenshotAs(OutputType.FILE);
+        String dest=System.getProperty("user.dir")+"/reports/"+testCaseName+".png";
+        File file=new File(dest);
+        FileUtils.copyFile(file,screenShot);
+        return dest;
     }
 
 

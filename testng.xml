@@ -4,6 +4,13 @@
     <listeners>
         <listener class-name="TestComponents.Listners"/>
     </listeners>
+    <test name="Order" >
+        <classes>
+            <class name="Test.SubmitOrderTest">
+
+            </class>
+        </classes>
+    </test>
     
     <test  verbose="2" name="Error Validations" thread-count="5">
         <classes>
@@ -12,11 +19,5 @@
             </class>
         </classes>
     </test>
-    <test name="Order" >
-        <classes>
-            <class name="Test.SubmitOrderTest">
 
-            </class>
-        </classes>
-    </test>
 </suite>
