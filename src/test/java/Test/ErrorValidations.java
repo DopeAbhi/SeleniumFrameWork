@@ -5,6 +5,7 @@ import PageObject.ConfirmationPage;
 import PageObject.PaymentPage;
 import PageObject.ProdutCatalouge;
 import TestComponents.BaseTest;
+import TestComponents.Retry;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class ErrorValidations extends BaseTest {
 
-@Test(groups = "ErrorHandling")
+@Test(groups = "ErrorHandling", retryAnalyzer = Retry.class)// for rerun failed test cases
     public void submitOrder() throws IOException {
 
     //Browser Invoke and Login into the Application is in the Base test

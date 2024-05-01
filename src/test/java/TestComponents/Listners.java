@@ -16,7 +16,7 @@ public class Listners extends BaseTest implements ITestListener {
     ExtentTest test;
     ExtentReports extentReports = ExtentReporterNG.getReportObject();  //Extent ReporterNG method call
 
-    ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>();
+    ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>(); //To Solve Concurrency Issue
 
     @Override
     public void onTestStart(ITestResult result) {
