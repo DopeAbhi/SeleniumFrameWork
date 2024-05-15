@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
-            <version>4.1.6</version>
+            <version>5.1.1</version>
         </dependency>
     </dependencies>
 
@@ -47,7 +47,7 @@
 
 <profiles>
     <profile>
-        <id>regression</id>
+        <id>Regression</id>
 
         <build>
         <pluginManagement>

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataReader {
-
+//Not Using in Framework
     public List<HashMap<String, String>> getJsonDataToMap() throws IOException {
         //This is inside the common.io dependency
         //UTF 8 is Standard to Convert JSON file to String

@@ -34,8 +34,14 @@ public class BaseTest {
         FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"/src/main/java/Resources/GlobalData.properties");
         properties.load(fis);
 
+        //This code decide from where you want your browser data
+        //System.getProperty(""); take variable input from terminal as well
+
+      String browser=  System.getProperty("browser")!=null ? System.getProperty("browser"): properties.getProperty("browser");
+
+
         //Logic to Select Browser
-        String browser = properties.getProperty("browser");
+   //     String browser = properties.getProperty("browser");
         if (browser.equalsIgnoreCase("chrome")) {
              driver = new ChromeDriver();
             driver.manage().window().maximize();
