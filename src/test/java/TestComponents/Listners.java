@@ -77,7 +77,6 @@ public class Listners extends BaseTest implements ITestListener {
         @Override
         public void onFinish (ITestContext context){
             extentReports.getStats();
-
             extentReports.flush();
         }
     }

@@ -4,10 +4,12 @@ import PageObject.LandingPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -42,24 +44,24 @@ public class BaseTest {
 
         //Logic to Select Browser
    //     String browser = properties.getProperty("browser");
-        if (browser.equalsIgnoreCase("chrome")) {
-             driver = new ChromeDriver();
-            driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        }
+        if (browser.contains("Chrome")) {  //To Run in Headless Mode
+            ChromeOptions options = new ChromeOptions();
+            if (browser.contains("headless")) {
+                options.addArguments("headless");
+            }
+            driver = new ChromeDriver(options);
+            driver.manage().window().setSize(new Dimension(1400,900));
+
+                   }
 
         else if (browser.equalsIgnoreCase("firefox"))
         {
              driver = new FirefoxDriver();
-            driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        }
+                   }
         else if (browser.equalsIgnoreCase("edge"))
         {
          driver = new EdgeDriver();
-            driver.manage().window().maximize();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        }
+                 }
 
         else if (browser.equalsIgnoreCase("safari"))
         {
