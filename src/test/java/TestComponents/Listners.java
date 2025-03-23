@@ -1,16 +1,14 @@
 package TestComponents;
 
-import Resources.ExtentReporterNG;
+import resources.ExtentReporterNG;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.epam.healenium.SelfHealingDriver;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Listners extends BaseTest implements ITestListener {
     ExtentTest test;
@@ -40,8 +38,8 @@ public class Listners extends BaseTest implements ITestListener {
 
 
         try {
-            driver = (WebDriver) result.getTestClass().getRealClass().getField("driver")  //Method to get the driver life from the test
-                    .get(result.getInstance());
+            driver = SelfHealingDriver.create((WebDriver) result.getTestClass().getRealClass().getField("driver")  //Method to get the driver life from the test
+                    .get(result.getInstance()));
             filePath = getScreenshot(result.getMethod().getMethodName(), driver);
 
             //            test.addScreenCaptureFromPath(filePath,result.getMethod().getMethodName());//Attaching screenshot to the test report

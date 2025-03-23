@@ -2,6 +2,7 @@ package AbstractComponents;
 
 import PageObject.CartPage;
 import PageObject.OrderPage;
+import com.epam.healenium.SelfHealingDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -52,6 +53,7 @@ public OrderPage ordersNavigation() {
 
     public void WaitForLocator(By FindBy)
     {
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.visibilityOfElementLocated(FindBy));
     }

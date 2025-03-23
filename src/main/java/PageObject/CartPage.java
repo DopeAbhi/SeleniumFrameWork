@@ -1,11 +1,15 @@
 package PageObject;
 
 import AbstractComponents.AbstractComponent;
+import com.epam.healenium.SelfHealingDriverWait;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.time.Duration;
 import java.util.List;
 
 public class CartPage extends AbstractComponent {
@@ -33,7 +37,10 @@ public class CartPage extends AbstractComponent {
 
     public PaymentPage cartCheckout()
     {
-        CheckoutButton.click();
+        WebElement element = new SelfHealingDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOf(CheckoutButton));
+
+        element.click();
         return new PaymentPage(driver);
 
     }
