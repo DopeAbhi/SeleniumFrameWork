@@ -9,6 +9,7 @@ import TestComponents.Retry;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import utils.Log;
 
 import java.io.IOException;
 
@@ -16,7 +17,7 @@ public class ErrorValidations extends BaseTest {
 
 @Test(groups = "ErrorHandling", retryAnalyzer = Retry.class)// for rerun failed test cases
     public void submitOrder() throws IOException {
-
+    Log.info("Starting Submit Order Test");
     //Browser Invoke and Login into the Application is in the Base test
 
     page.loginApplication("AbhayVerma@yopmail.com", "Test"); //here is page object is getting access from parent class
@@ -35,6 +36,7 @@ public class ErrorValidations extends BaseTest {
     @Test
     public void addtoCartcheck()
     {
+        Log.info("Starting Add to Cart Check Test");
         String productName = "ADIDAS ORIGINAL";
         String productName2 = "ZARA COAT 3";
         //  WebDriverManager.chromedriver().setup();  //We don't need this from selenium 4  //This downloads the driver for chrome while running

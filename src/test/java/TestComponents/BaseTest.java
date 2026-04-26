@@ -4,6 +4,14 @@ import PageObject.LandingPage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
+import com.github.dockerjava.transport.DockerHttpClient;
+import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,6 +20,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -32,10 +41,36 @@ public class BaseTest {
     public SelfHealingDriver driver;
     public LandingPage page;
 
-    public SelfHealingDriver intializeDriver() throws IOException {
+    public SelfHealingDriver intializeDriver() throws IOException, InterruptedException {
+        // 1️⃣ Set up Docker client configuration
+        DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+
+        // 2️⃣ Use the Zero-dependency HTTP client
+        DockerHttpClient httpClient = new ZerodepDockerHttpClient.Builder()
+                .dockerHost(config.getDockerHost())  // Auto-detects Docker daemon
+                .connectionTimeout(Duration.ofSeconds(30))
+                .responseTimeout(Duration.ofSeconds(45))
+                .build();
+
+        // 3️⃣ Create Docker Client
+        DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
+
+        // 4️⃣ Start Existing Containers (Without Pulling)
+        System.out.println("🔄 Checking and starting existing Docker containers...");
+
+        startContainerIfNotRunning(dockerClient, "postgres-db", "postgres:latest");
+        startContainerIfNotRunning(dockerClient, "healenium", "healenium/healenium:latest");
+        startContainerIfNotRunning(dockerClient, "selector-imitator", "healenium/selector-imitator:latest");
+
+        System.out.println("✅ All required containers are running!");
+
+        // 5️⃣ Wait for Healenium to be Ready
+        System.out.println("⏳ Waiting for Healenium to be ready...");
+        waitForContainer(dockerClient, "healenium");
+        waitForContainer(dockerClient, "postgres-db");
+        waitForContainer(dockerClient, "selector-imitator");
+
         WebDriver delegate = null;
-
-
         //Setting Global Properties
 
         Properties properties = new Properties();
@@ -87,6 +122,51 @@ public class BaseTest {
     }
 
 
+
+    // Helper method to check and start a container if it is not running
+    private void startContainerIfNotRunning(DockerClient dockerClient, String containerName, String imageName) {
+        boolean isRunning = dockerClient.listContainersCmd().withShowAll(true).exec().stream()
+                .anyMatch(container -> container.getNames()[0].equals("/" + containerName) && container.getState().equalsIgnoreCase("running"));
+
+        boolean exists = dockerClient.listContainersCmd().withShowAll(true).exec().stream()
+                .anyMatch(container -> container.getNames()[0].equals("/" + containerName));
+
+        if (isRunning) {
+            System.out.println("✅ Container '" + containerName + "' is already running.");
+        } else if (exists) {
+            System.out.println("▶️ Starting existing container: " + containerName);
+            dockerClient.startContainerCmd(containerName).exec();
+        } else {
+            System.out.println("🚀 Creating and starting new container: " + containerName);
+            CreateContainerResponse container = dockerClient.createContainerCmd(imageName)
+                    .withName(containerName)
+                    .withHostConfig(HostConfig.newHostConfig().withAutoRemove(true)) // Auto-remove after stop
+                    .exec();
+            dockerClient.startContainerCmd(container.getId()).exec();
+        }
+    }
+
+    // Helper method to wait until a container is fully running
+    private void waitForContainer(DockerClient dockerClient, String containerName) throws InterruptedException {
+        for (int i = 0; i < 10; i++) { // Retry for ~50 seconds
+            Thread.sleep(5000); // Wait 5 seconds
+            boolean isRunning = dockerClient.listContainersCmd().exec().stream()
+                    .anyMatch(container -> container.getNames()[0].equals("/" + containerName));
+            if (isRunning) {
+                System.out.println("✅ " + containerName + " is running.");
+                return;
+            }
+        }
+        throw new RuntimeException("❌ " + containerName + " failed to start.");
+    }
+
+
+
+
+
+
+
+
     //Converting Json to Hash Map
     public List<HashMap<String, String>> getJsonDataToMap(String FilePath) throws IOException {
         //This is inside the common.io dependency
@@ -105,7 +185,7 @@ public class BaseTest {
 
     @BeforeMethod(alwaysRun = true) //This method send driver information to the page object classes
     // This is used to avoid while running for specific groups
-    public LandingPage launchApplication() throws IOException {
+    public LandingPage launchApplication() throws IOException, InterruptedException {
         driver = intializeDriver();
         page = new LandingPage(driver);
         page.goTo();

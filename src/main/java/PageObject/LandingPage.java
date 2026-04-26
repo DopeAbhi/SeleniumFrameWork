@@ -5,9 +5,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LandingPage extends AbstractComponent {
 
+    private static final Logger log = LoggerFactory.getLogger(LandingPage.class);
     WebDriver driver;
     public LandingPage(WebDriver driver)
     {
@@ -39,6 +42,7 @@ public class LandingPage extends AbstractComponent {
         userEmail.sendKeys(email);
         userPassword.sendKeys(password);
         submit.click();
+
         return  new ProdutCatalouge(driver);
 
     }

@@ -18,7 +18,7 @@ public class StepDefinitionImpl extends BaseTest {
     ConfirmationPage confirmationPage;
 
     @Given("I landed in the Ecommerce Website")
-    public void i_landed_in_the_ecommerce_website() throws IOException {
+    public void i_landed_in_the_ecommerce_website() throws IOException, InterruptedException {
         landingPage = launchApplication();
     }
 

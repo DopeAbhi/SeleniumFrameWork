@@ -1,0 +1,38 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="SeleniumFramework" />
+          <option value="SeleniumFramework" />
+          <option value="SeleniumFramework" />
+          <option value="SeleniumFramework" />
+          <option value="SeleniumFramework" />
+          <option value="SeleniumFramework" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="org.eclipse.jetty:jetty-server:11.0.21" />
+          <option value="org.eclipse.jetty:jetty-http:11.0.21" />
+          <option value="com.fasterxml.jackson.core:jackson-core:2.14.2" />
+          <option value="org.apache.commons:commons-compress:1.21" />
+          <option value="com.google.guava:guava:30.1-jre" />
+          <option value="org.bouncycastle:bcpkix-jdk18on:1.76" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
