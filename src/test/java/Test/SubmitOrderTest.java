@@ -24,7 +24,6 @@ public class SubmitOrderTest extends BaseTest {
 
         //  WebDriverManager.chromedriver().setup();  //We don't need this from selenium 4  //This downloads the driver for chrome while running
 
-        //Browser Ijsnvoke and Login into the Application is in the Base test
 
         ProdutCatalouge produtCatalouge = page.loginApplication(input.get("email"), input.get("password")); //here is page object is getting access from parent class
 
