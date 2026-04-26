@@ -27,7 +27,7 @@ public class SubmitOrderTest extends BaseTest {
 
         ProdutCatalouge produtCatalouge = page.loginApplication(input.get("email"), input.get("password")); //here is page object is getting access from parent class
 
-        //Adding Item in Cart
+        //Adding Item in Cart Just for Testing
 
 //        List<WebElement> products = produtCatalouge.getProducts();
          produtCatalouge.addProductToCart(input.get("productName"));
